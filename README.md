@@ -11,7 +11,7 @@
 ### Display on Mobile Phone
 
 <center>
-<img src="http://kylinhub.oss-cn-shanghai.aliyuncs.com/2020-03-15-todo.png" width="50%" height="50%" />
+<img src="http://kylinhub.oss-cn-shanghai.aliyuncs.com/2020-03-15-todoa.jpg" width="50%" height="50%" />
 </center>
 
 
