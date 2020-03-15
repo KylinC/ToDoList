@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>TodoList</title>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    <input type="text" v-model="title"/> <button type="button" @click="addItem">Add</button>
+    <div>
+        <table width="100%" border="1" cellspacing="0" cellpadding="0">
+            <tr style="color: #FFFFFF;font-size:16px;">
+                <td height="40" align="center" bgcolor="#3399FF"><label><input type="checkbox" @click="allSelect()" :checked="isAll">Select All</label></td>
+                <td align="center" bgcolor="#3399FF">Title</td>
+                <td align="center" bgcolor="#3399FF">Manager</td>
+            </tr>
+            <tr style="font-size: 14px;" v-for="(item,index) in listData" :key="index">
+                <td height="40" align="center"><input type="checkbox" @click="selectItem(index)" :checked="item.checked"></td>
+                <td align="center">{{item.title}}</td>
+                <td align="center" @click="delItem(index)">Delete</td>
+            </tr>
+            <tr>
+                <td colspan="3" height="40"><button type="button" @click="allDelItem">Batch Delete</button>
+                    &nbsp;&nbsp;<button type="button" @click="submitData()">Submit</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script src="js/vue.js"></script>
+<script>
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                title:"",
+                listData:[],
+                isAll:false
+            }
+        },
+        methods:{
+            addItem(){
+                // console.log(this.title);
+                if(this.title.match(/^\s*$/)){
+                    alert("empty content");
+                    return;
+                }
+                this.listData.push({title:this.title,checked:false});
+            },
+            delItem(index){
+                // console.log(index);
+                this.listData.splice(index,1);
+            },
+            allSelect(){
+                this.isAll=!this.isAll;
+                if (this.listData.length>0){
+                    for (let i=0;i<this.listData.length;i++){
+                        this.listData[i].checked=this.isAll;
+                    }
+                }
+            },
+            allDelItem(){
+                // console.log(JSON.stringify(this.listData));
+                if(this.listData.length>0){
+                    for(let i=0;i<this.listData.length;i++){
+                        if(this.listData[i].checked){
+                            this.listData.splice(i--,1);
+                        }
+                    }
+                }
+                this.checkedAllSelect();
+            },
+            selectItem(index){
+                this.listData[index].checked=!this.listData[index].checked;
+                //数据变化视图不渲染，参数表(原数据，索引，新数据)，等价Vue.set()
+                this.$set(this.listData,index, this.listData[index]);
+                this.checkedAllSelect();
+            },
+            checkedAllSelect(){
+                let isAll=true;
+                if (this.listData.length>0){
+                    for (let i=0;i<this.listData.length;i++){
+                        if (!this.listData[i].checked){
+                            isAll=false;
+                            break;
+                        }
+                    }
+                }else{
+                    isAll = false;
+                }
+                this.isAll = isAll;
+            },
+            submitData(){
+                let data=[];
+                if (this.listData.length>0){
+                    for (let i=0;i<this.listData.length;i++) {
+                        if (this.listData[i].checked){
+                            data.push(this.listData[i]);
+                        }
+                    }
+                }
+                alert(JSON.stringify(data));
+            }
+        }
+    })
+</script>
+</body>
+</html>
